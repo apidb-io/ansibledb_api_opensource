@@ -1,11 +1,17 @@
 # ansibledb_api_opensource
 
-ansibledb_api_opensource is a simple mongoDB that stores ansible 'setup' JSON files. Once **ansibledb_api_opensource** has been setup, install and setup the ansibledb-opensource collection from Ansible galaxy and configure it to point to your ansibledb_API_opensource server. **You can find the Galaxy collection here: https://galaxy.ansible.com/apidb/ansibledb_opensource**. This makes it very easy to collect and store all your server facts and retrieve them using the API and JQ.
+ansibledb_api_opensource is a simple mongoDB that stores ansible 'setup' JSON files. Once **ansibledb_api_opensource** has been setup, go over to our ansibledb-opensource collection on Ansible galaxy and configure it to point to your ansibledb_API_opensource server. **You can find the Galaxy collection here: https://galaxy.ansible.com/apidb/ansibledb_opensource**. This makes it very easy to collect and store all your server facts and retrieve them using the API and JQ.
 
 The ansibledb_API_opensource Server recieves requests from Ansible and offers an end point to get your data.
 
 ## Installation
+We have 2 options for installation. You can install it on a standalone VM/server or download and run the docker image.
 
+Installation on a VM/Server
+<details>
+ <summary>Expand for details</summary>
+  <p>
+   
 One Line Install
 ```bash
 wget -O - https://get.apidb.io/ansibledb_opensource | bash
@@ -62,6 +68,8 @@ apt install mongodb
 systemctl enable --now mongodb
 systemctl status mongodb
 ```
+
+</p></details>
 
 </p></details>
 
