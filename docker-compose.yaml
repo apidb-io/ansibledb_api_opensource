@@ -11,8 +11,8 @@ services:
       - mongodb_data_container:/data/db
   
   ansibledb_opensource:
-    #image: apidb/ansibledb_opensource
-    image: ansibledb_api_opensource
+    image: apidb/ansibledb_opensource
+    #image: ansibledb_api_opensource
     ports:
       - 8080:8080
       - 443:443
