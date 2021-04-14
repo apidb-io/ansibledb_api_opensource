@@ -236,30 +236,88 @@ Now use JQ to pull out the data you want to see.
 
   NOTE: ansibledb_api_IP_address = the IP or servername of where you are running mongoDB
   
-#### Pull out all data:
+#### Advice on the dataset
+To limit access to the API, you can create a copy of the data in a json format and just run your queries against that. 
+I.E:
+````
+curl -s http://AnsibleDB_IP:8080/api/servers > dataset.json
+````
+Now you can just query this Dataset instead of always using the API.
+
+Alternatively, you can still access the data via the API like this.
 ```bash
-curl -s http://ansibledb_api_IP_address:5000/api/servers | jq
+curl -s http://ansibledb_api_IP_address:8080/api/servers | jq
 ````
+### Examples:
+Here are some examples to pull out interesting pieces of information.
 
-#### List all servernames, distribution and version:
-````
-curl -s http://ansibledb_api_IP_address:5000/api/servers | jq '[.[] | {name:.ansible_facts.ansible_fqdn, distribution:.ansible_facts.ansible_distribution, version: .ansible_facts.ansible_distribution_version}]'
-````
+#### pull out the whole dataset
+  cat dataset.json | jq
 
-#### Generate a list of servernames that match a specific fact (in this case ubuntu 18.04):
-````
-curl -s http://ansibledb_api_IP_address:5000/api/servers | jq --arg INPUT "$INPUT" -r '.[] | select(.ansible_facts.ansible_distribution_version | tostring | contains("18.04")) | (.ansible_facts.ansible_fqdn+"\"")'
-````
 
-#### Count all OS distributions:
-````
-curl -s http://ansibledb_api_IP_address:5000/api/servers | jq  "group_by(.ansible_facts.ansible_distribution_version) | map({([0].ansible_facts.ansible_distribution_version):length})"
-````
 
-#### (custom local fact) List all Instance types:
-````
-curl -s http://54.75.0.84:5000/api/servers | jq  "group_by(.ansible_facts.ansible_local.local.local_facts.instance_type) | map({(.[0].ansible_facts.ansible_local.local.local_facts.instance_type):length})"
-````
+	List all servernames, distribution and OS version:
+
+cat dataset.json | jq '[.[] | {name:.ansible_facts.ansible_fqdn, distribution:.ansible_facts.ansible_distribution, version: .ansible_facts.ansible_distribution_version}]'
+
+
+
+	List all servernames, distribution and kernel version:
+
+cat dataset.json | jq '[.[] | {name:.ansible_facts.ansible_fqdn, distribution:.ansible_facts.ansible_distribution, version: .ansible_facts.ansible_kernel}]'
+
+
+
+	List and count all OS types:
+
+cat dataset.json | jq  "group_by(.ansible_facts.ansible_distribution_version) | map({(.[0].ansible_facts.ansible_distribution_version):length})"
+
+
+
+	Generate a list of servernames that match a specific fact (in this case ubuntu 18.04):
+
+cat dataset.json | jq --arg INPUT "$INPUT" -r '.[] | select(.ansible_facts.ansible_distribution_version | tostring | contains("18.04")) | (.ansible_facts.ansible_fqdn)'
+
+
+
+
+Custom facts (when things get interesting)
+Remember to create a new dataset.json file!
+curl -s http://AnsibleDB_IP:5000/api/servers > dataset.json
+
+
+	if you've generated local facts, access them like this:
+
+cat dataset.json | jq -r '.[].ansible_facts.ansible_local.local'
+
+
+
+	And to get to specific region (custom) facts:
+
+cat dataset.json | jq -r '.[].ansible_facts.ansible_local.local.local_facts.avail_zone'
+
+
+	And to get to specific region (custom) facts (COUNT):
+
+cat dataset.json | jq  "group_by(.ansible_facts.ansible_local.local.local_facts.avail_zone) | map({(.[0].ansible_facts.ansible_local.local.local_facts.avail_zone):length})"
+
+
+
+	Generate a list of servers in a particular region:
+
+cat dataset.json | jq --arg INPUT "$INPUT" -r '.[] | select(.ansible_facts.ansible_local.local.local_facts.avail_zone | tostring | contains("ap-south-1")) | (.ansible_facts.ansible_fqdn)'
+
+
+	List All AWS Instance types and totals:
+
+cat dataset.json | jq  "group_by(.ansible_facts.ansible_local.local.local_facts.instance_type) | map({(.[0].ansible_facts.ansible_local.local.local_facts.instance_type):length})"
+
+
+
+	Generate a list of instance type and region?
+
+cat dataset.json | jq 'group_by(.ansible_facts.ansible_local.local.local_facts.instance_type) | map({region: map(.ansible_facts.ansible_local.local.local_facts.avail_zone) | unique, (.[0].ansible_facts.ansible_local.local.local_facts.instance_type): map(.ansible_facts.ansible_local.local.local_facts.instance_type) | length})'
+
 
 
 </p></details>
