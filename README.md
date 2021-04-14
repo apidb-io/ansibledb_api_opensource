@@ -7,7 +7,7 @@ The ansibledb_API_opensource Server recieves requests from Ansible and offers an
 ## Installation
 We have 2 options for installation. You can install it on a standalone VM/server or download and run the docker image.
 
-Installation on a VM/Server
+## Installation on a VM/Server
 <details>
  <summary>Expand for details</summary>
   <p>
