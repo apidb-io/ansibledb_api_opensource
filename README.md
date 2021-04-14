@@ -69,61 +69,12 @@ systemctl enable --now mongodb
 systemctl status mongodb
 ```
 
-</p></details>
-
-</p></details>
-
-## Container Image Installation
-<details>
- <summary>Expand for details</summary>
-  <p>
-
-### Pre-reqs
-  * Install [Docker](https://docs.docker.com/engine/install/) for your OS distribution
-  * Install [Docker-compose](https://docs.docker.com/compose/install/) for your Linux Distribution
-
-Once you have the pre-reqs in place, create this docker-compose.yml file or download it [here](https://github.com/apidb-io/ansibledb_api_opensource/raw/master/docker-compose.yaml):
-````
-version: '3.7'
-services:
-  mongodb:
-    image: mongo:latest
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: rootpassword
-    ports:
-      - 27017:27017
-    volumes:
-      - mongodb_data_container:/data/db
-
-  ansibledb_opensource:
-    image: apidb/ansibledb_opensource
-    ports:
-      - 8080:5000
-    environment:
-      MONGOHOST: mongodb
-      MONGO_USERNAME: root
-      MONGO_PASSWORD: rootpassword
-
-volumes:
-  mongodb_data_container:
-````
-
-Now, from the same directory, run the docker compose command:
-````
-docker-compose up -d
-````
-This command will pull down the image from DockerHub and run the image in the background. Thats it. You can check the port is listening on port 8080 using ````netstat -tnlp````.
-
-</p></details>
-
-#
-
 ## Running ANSIBLEDB Server
 AnsibleDB will listen on port :5000. If you are running AnsibleDB on a remote server, remember to open up the FW to allow traffic on that port. If you're testing it out and running it on localhost, you'll be fine. You can always run this in the background ````nohup python3 server.py &````
 
 ```bash
 python3 server.py
+````
 
 ### Check port :5000 is listening:
 ````
@@ -204,6 +155,57 @@ Ubuntu 20
 https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-uwsgi-and-nginx-on-ubuntu-20-04
 ```
 
+</p></details>
+
+</p></details>
+
+#
+
+## Container Image Installation
+<details>
+ <summary>Expand for details</summary>
+  <p>
+
+### Pre-reqs
+  * Install [Docker](https://docs.docker.com/engine/install/) for your OS distribution
+  * Install [Docker-compose](https://docs.docker.com/compose/install/) for your Linux Distribution
+
+Once you have the pre-reqs in place, create this docker-compose.yml file or download it [here](https://github.com/apidb-io/ansibledb_api_opensource/raw/master/docker-compose.yaml):
+````
+version: '3.7'
+services:
+  mongodb:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+
+  ansibledb_opensource:
+    image: apidb/ansibledb_opensource
+    ports:
+      - 8080:5000
+    environment:
+      MONGOHOST: mongodb
+      MONGO_USERNAME: root
+      MONGO_PASSWORD: rootpassword
+
+volumes:
+  mongodb_data_container:
+````
+
+Now, from the same directory, run the docker compose command:
+````
+docker-compose up -d
+````
+This command will pull down the image from DockerHub and run the image in the background. Thats it. You can check the port is listening on port 8080 using ````netstat -tnlp````.
+
+</p></details>
+
+#
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
