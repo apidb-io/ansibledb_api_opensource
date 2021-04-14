@@ -162,7 +162,7 @@ https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications
 
 </p></details>
 
-----
+-------------------------------------------------------------------
 
 ## Container Image Installation
 <details>
@@ -290,7 +290,7 @@ If you want to collect custom facts, I've created some ansible code to do this f
 
 </p></details>
 </p></details>
-----
+-------------------------------------------------------------------
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
