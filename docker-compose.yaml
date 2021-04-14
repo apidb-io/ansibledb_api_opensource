@@ -1,0 +1,23 @@
+version: '3.7'
+services:
+  mongodb:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+  
+  ansibledb_opensource:
+    image: apidb/ansibledb_opensource
+    ports:
+      - 8080:5000
+    environment:
+      MONGOHOST: mongodb
+      MONGO_USERNAME: root
+      MONGO_PASSWORD: rootpassword
+
+volumes:
+  mongodb_data_container:
