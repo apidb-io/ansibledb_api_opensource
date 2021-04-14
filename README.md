@@ -79,9 +79,35 @@ systemctl status mongodb
   <p>
 
 ### Pre-reqs
-  * Install Docker for your OS distribution
+  * Install [Docker](https://docs.docker.com/engine/install/) for your OS distribution
   * Install [Docker-compose](https://docs.docker.com/compose/install/) for your Linux Distribution
 
+Once you have the pre-reqs in place, create this docker-compose.yml file or download it [here](https://github.com/apidb-io/ansibledb_api_opensource/raw/master/docker-compose.yaml):
+````
+version: '3.7'
+services:
+  mongodb:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+
+  ansibledb_opensource:
+    image: apidb/ansibledb_opensource
+    ports:
+      - 8080:5000
+    environment:
+      MONGOHOST: mongodb
+      MONGO_USERNAME: root
+      MONGO_PASSWORD: rootpassword
+
+volumes:
+  mongodb_data_container:
+````
 
 
   </p></details>
@@ -91,8 +117,6 @@ AnsibleDB will listen on port :5000. If you are running AnsibleDB on a remote se
 
 ```bash
 python3 server.py
-```
-
 
 ### Check port :5000 is listening:
 ````
