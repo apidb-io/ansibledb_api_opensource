@@ -171,6 +171,9 @@ https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications
  <summary>Expand for details</summary>
   <p>
 
+<details>
+ <summary>Docker setup</summary>
+  <p>
 ### Pre-reqs
   * Install [Docker](https://docs.docker.com/engine/install/) for your OS distribution
   * Install [Docker-compose](https://docs.docker.com/compose/install/) for your Linux Distribution
@@ -207,6 +210,8 @@ Now, from the same directory, run the docker compose command:
 docker-compose up -d
 ````
 This command will pull down the image from DockerHub and run the image in the background. Thats it. You can check the port is listening on port 8080 using ````netstat -tnlp````.
+
+</p></details>
 
 <details>
  <summary>Expand for ansible setup to collect facts</summary>
@@ -289,7 +294,7 @@ If you want to collect custom facts, I've created some ansible code to do this f
 ``cat dataset.json | jq 'group_by(.ansible_facts.ansible_local.local.local_facts.instance_type) | map({region: map(.ansible_facts.ansible_local.local.local_facts.avail_zone) | unique, (.[0].ansible_facts.ansible_local.local.local_facts.instance_type): map(.ansible_facts.ansible_local.local.local_facts.instance_type) | length})'``
 
 </p></details>
-</p></details>
+
 
 -------------------------------------------------------------------
 
