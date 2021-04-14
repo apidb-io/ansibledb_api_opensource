@@ -109,8 +109,15 @@ volumes:
   mongodb_data_container:
 ````
 
+Now, from the same directory, run the docker compose command:
+````
+docker-compose up -d
+````
+This command will pull down the image from DockerHub and run the image in the background. Thats it. You can check the port is listening on port 8080 using ````netstat -tnlp````.
 
-  </p></details>
+</p></details>
+
+#
 
 ## Running ANSIBLEDB Server
 AnsibleDB will listen on port :5000. If you are running AnsibleDB on a remote server, remember to open up the FW to allow traffic on that port. If you're testing it out and running it on localhost, you'll be fine. You can always run this in the background ````nohup python3 server.py &````
