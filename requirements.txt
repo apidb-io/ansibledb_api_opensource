@@ -1,3 +1,4 @@
 pymongo
 Flask
 python-dotenv
+gunicorn

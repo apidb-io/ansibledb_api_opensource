@@ -3,6 +3,7 @@ from flask import Flask, request
 from dotenv import load_dotenv
 import os
 import json
+import ssl
 
 app = Flask(__name__)
 load_dotenv()
@@ -14,10 +15,7 @@ MONGO_PORT=27017
 MONGO_DB = "ansibledb"
 uri = "mongodb://{}:{}@{}:{}/?authSource=admin".format(MONGO_USER, MONGO_PASS, MONGO_HOST, MONGO_PORT)
 client = MongoClient(uri)
-#servers = client.servers
 
-
-#client = MongoClient(host=MONGO_HOST, username=MONGO_USER ,password=MONGO_PASS, authSource='admin', authMechanism='SCRAM-SHA-1',port=27017)
 db = client['ansibledb']
 servers = db.servers
 
@@ -47,5 +45,5 @@ def ansibleservers():
     return result
 
 if __name__ == '__main__':
-    #app.run(debug=True, host='0.0.0.0') ## Debug Flask app
-    app.run(host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0', port=443)
+
