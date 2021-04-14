@@ -290,6 +290,7 @@ If you want to collect custom facts, I've created some ansible code to do this f
 
 </p></details>
 </p></details>
+
 -------------------------------------------------------------------
 
 ## Contributing
