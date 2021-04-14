@@ -174,6 +174,7 @@ https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications
 <details>
  <summary>Docker setup</summary>
   <p>
+   
 ### Pre-reqs
   * Install [Docker](https://docs.docker.com/engine/install/) for your OS distribution
   * Install [Docker-compose](https://docs.docker.com/compose/install/) for your Linux Distribution
@@ -216,6 +217,7 @@ This command will pull down the image from DockerHub and run the image in the ba
 <details>
  <summary>Expand for ansible setup to collect facts</summary>
   <p>
+   
 AnsibleDB will listen on port :8080. If you are running AnsibleDB on a remote server, remember to open up the FW to allow traffic on that port. If you're testing it out and running it on localhost, you'll be fine. You can always run this in the background ````nohup python3 server.py &````
 
 
