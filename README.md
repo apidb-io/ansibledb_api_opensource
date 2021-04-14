@@ -80,7 +80,7 @@ systemctl status mongodb
 
 ### Pre-reqs
   * Install Docker for your OS distribution
-  * Install (Docker-compose)[https://docs.docker.com/compose/install/] for your Linux Distribution
+  * Install [Docker-compose](https://docs.docker.com/compose/install/) for your Linux Distribution
 
 
 
