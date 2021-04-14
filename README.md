@@ -208,8 +208,6 @@ docker-compose up -d
 ````
 This command will pull down the image from DockerHub and run the image in the background. Thats it. You can check the port is listening on port 8080 using ````netstat -tnlp````.
 
-</p></details>
-
 <details>
  <summary>Expand for ansible setup to collect facts</summary>
   <p>
