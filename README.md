@@ -73,7 +73,7 @@ systemctl status mongodb
 #
 
 <details>
- <summary>Expand for Running ANSIBLEDB Server</summary>
+ <summary>Expand for ansible setup to collect facts</summary>
   <p>
 AnsibleDB will listen on port :5000. If you are running AnsibleDB on a remote server, remember to open up the FW to allow traffic on that port. If you're testing it out and running it on localhost, you'll be fine. You can always run this in the background ````nohup python3 server.py &````
 
@@ -207,6 +207,60 @@ Now, from the same directory, run the docker compose command:
 docker-compose up -d
 ````
 This command will pull down the image from DockerHub and run the image in the background. Thats it. You can check the port is listening on port 8080 using ````netstat -tnlp````.
+
+</p></details>
+
+<details>
+ <summary>Expand for ansible setup to collect facts</summary>
+  <p>
+AnsibleDB will listen on port :8080. If you are running AnsibleDB on a remote server, remember to open up the FW to allow traffic on that port. If you're testing it out and running it on localhost, you'll be fine. You can always run this in the background ````nohup python3 server.py &````
+
+
+## Now setup ansibledb_opensource:
+ansibledb_opensource is a collection of ansible roles to collect facts from all your servers and store them in the mongoDB. With a small amount of setup, you'll be up and running.
+**You can find the Galaxy collection here: https://galaxy.ansible.com/apidb/ansibledb_opensource**
+
+FOLLOW THE README.md ON THE ANSIBLE-GALAXY PAGE.
+
+### Usage
+Once you've send over some data, install JQ and run the following JQ commands to pull out the data you want:
+
+#### Get Server Versions (using JQ to filter)
+
+Install JQ:
+````
+apt/yum install jq
+````
+
+Now use JQ to pull out the data you want to see.
+
+  NOTE: ansibledb_api_IP_address = the IP or servername of where you are running mongoDB
+  
+#### Pull out all data:
+```bash
+curl -s http://ansibledb_api_IP_address:5000/api/servers | jq
+````
+
+#### List all servernames, distribution and version:
+````
+curl -s http://ansibledb_api_IP_address:5000/api/servers | jq '[.[] | {name:.ansible_facts.ansible_fqdn, distribution:.ansible_facts.ansible_distribution, version: .ansible_facts.ansible_distribution_version}]'
+````
+
+#### Generate a list of servernames that match a specific fact (in this case ubuntu 18.04):
+````
+curl -s http://ansibledb_api_IP_address:5000/api/servers | jq --arg INPUT "$INPUT" -r '.[] | select(.ansible_facts.ansible_distribution_version | tostring | contains("18.04")) | (.ansible_facts.ansible_fqdn+"\"")'
+````
+
+#### Count all OS distributions:
+````
+curl -s http://ansibledb_api_IP_address:5000/api/servers | jq  "group_by(.ansible_facts.ansible_distribution_version) | map({([0].ansible_facts.ansible_distribution_version):length})"
+````
+
+#### (custom local fact) List all Instance types:
+````
+curl -s http://54.75.0.84:5000/api/servers | jq  "group_by(.ansible_facts.ansible_local.local.local_facts.instance_type) | map({(.[0].ansible_facts.ansible_local.local.local_facts.instance_type):length})"
+````
+
 
 </p></details>
 
