@@ -70,8 +70,6 @@ systemctl status mongodb
 ```
 </p></details>
 
-#
-
 <details>
  <summary>Expand for ansible setup to collect facts</summary>
   <p>
@@ -164,7 +162,7 @@ https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications
 
 </p></details>
 
-#
+----
 
 ## Container Image Installation
 <details>
@@ -254,77 +252,45 @@ Here are some examples to pull out interesting pieces of information.
 #### pull out the whole dataset
 ``cat dataset.json | jq``
 
+#### List all servernames, distribution and OS version:
+``cat dataset.json | jq '[.[] | {name:.ansible_facts.ansible_fqdn, distribution:.ansible_facts.ansible_distribution, version: .ansible_facts.ansible_distribution_version}]'``
+
+#### List all servernames, distribution and kernel version:
+``cat dataset.json | jq '[.[] | {name:.ansible_facts.ansible_fqdn, distribution:.ansible_facts.ansible_distribution, version: .ansible_facts.ansible_kernel}]'``
+
+#### List and count all OS types:
+``cat dataset.json | jq  "group_by(.ansible_facts.ansible_distribution_version) | map({(.[0].ansible_facts.ansible_distribution_version):length})"``
+
+#### Generate a list of servernames that match a specific fact (in this case ubuntu 18.04):
+``cat dataset.json | jq --arg INPUT "$INPUT" -r '.[] | select(.ansible_facts.ansible_distribution_version | tostring | contains("18.04")) | (.ansible_facts.ansible_fqdn)'``
 
 
-	List all servernames, distribution and OS version:
+## Custom facts
+If you want to collect custom facts, I've created some ansible code to do this for you. You can find the custom extensions code [here](https://github.com/apidb-io/custom_extensions). I've set them up to collect certain facts from different OS's. These are fully customisable by yourself.
 
-cat dataset.json | jq '[.[] | {name:.ansible_facts.ansible_fqdn, distribution:.ansible_facts.ansible_distribution, version: .ansible_facts.ansible_distribution_version}]'
+** Whenever you refresh the facts (run ansible again) you must update the dataset otherwise you'll setill be looking at old data. IF you go direct to the API, you can ignore this.
 
+#### if you've generated local facts, access them like this:
+``cat dataset.json | jq -r '.[].ansible_facts.ansible_local.local'``
 
+#### And to get to specific region (custom) facts:
+``cat dataset.json | jq -r '.[].ansible_facts.ansible_local.local.local_facts.avail_zone'``
 
-	List all servernames, distribution and kernel version:
+#### And to get to specific region (custom) facts (COUNT):
+``cat dataset.json | jq  "group_by(.ansible_facts.ansible_local.local.local_facts.avail_zone) | map({(.[0].ansible_facts.ansible_local.local.local_facts.avail_zone):length})"``
 
-cat dataset.json | jq '[.[] | {name:.ansible_facts.ansible_fqdn, distribution:.ansible_facts.ansible_distribution, version: .ansible_facts.ansible_kernel}]'
+#### Generate a list of servers in a particular region:
+``cat dataset.json | jq --arg INPUT "$INPUT" -r '.[] | select(.ansible_facts.ansible_local.local.local_facts.avail_zone | tostring | contains("ap-south-1")) | (.ansible_facts.ansible_fqdn)'``
 
+#### List All AWS Instance types and totals:
+``cat dataset.json | jq  "group_by(.ansible_facts.ansible_local.local.local_facts.instance_type) | map({(.[0].ansible_facts.ansible_local.local.local_facts.instance_type):length})"``
 
-
-	List and count all OS types:
-
-cat dataset.json | jq  "group_by(.ansible_facts.ansible_distribution_version) | map({(.[0].ansible_facts.ansible_distribution_version):length})"
-
-
-
-	Generate a list of servernames that match a specific fact (in this case ubuntu 18.04):
-
-cat dataset.json | jq --arg INPUT "$INPUT" -r '.[] | select(.ansible_facts.ansible_distribution_version | tostring | contains("18.04")) | (.ansible_facts.ansible_fqdn)'
-
-
-
-
-Custom facts (when things get interesting)
-Remember to create a new dataset.json file!
-curl -s http://AnsibleDB_IP:5000/api/servers > dataset.json
-
-
-	if you've generated local facts, access them like this:
-
-cat dataset.json | jq -r '.[].ansible_facts.ansible_local.local'
-
-
-
-	And to get to specific region (custom) facts:
-
-cat dataset.json | jq -r '.[].ansible_facts.ansible_local.local.local_facts.avail_zone'
-
-
-	And to get to specific region (custom) facts (COUNT):
-
-cat dataset.json | jq  "group_by(.ansible_facts.ansible_local.local.local_facts.avail_zone) | map({(.[0].ansible_facts.ansible_local.local.local_facts.avail_zone):length})"
-
-
-
-	Generate a list of servers in a particular region:
-
-cat dataset.json | jq --arg INPUT "$INPUT" -r '.[] | select(.ansible_facts.ansible_local.local.local_facts.avail_zone | tostring | contains("ap-south-1")) | (.ansible_facts.ansible_fqdn)'
-
-
-	List All AWS Instance types and totals:
-
-cat dataset.json | jq  "group_by(.ansible_facts.ansible_local.local.local_facts.instance_type) | map({(.[0].ansible_facts.ansible_local.local.local_facts.instance_type):length})"
-
-
-
-	Generate a list of instance type and region?
-
-cat dataset.json | jq 'group_by(.ansible_facts.ansible_local.local.local_facts.instance_type) | map({region: map(.ansible_facts.ansible_local.local.local_facts.avail_zone) | unique, (.[0].ansible_facts.ansible_local.local.local_facts.instance_type): map(.ansible_facts.ansible_local.local.local_facts.instance_type) | length})'
-
-
+#### Generate a list of instance type and region?
+``cat dataset.json | jq 'group_by(.ansible_facts.ansible_local.local.local_facts.instance_type) | map({region: map(.ansible_facts.ansible_local.local.local_facts.avail_zone) | unique, (.[0].ansible_facts.ansible_local.local.local_facts.instance_type): map(.ansible_facts.ansible_local.local.local_facts.instance_type) | length})'``
 
 </p></details>
-
 </p></details>
-
-#
+----
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
