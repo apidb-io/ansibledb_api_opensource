@@ -252,7 +252,7 @@ curl -s http://ansibledb_api_IP_address:8080/api/servers | jq
 Here are some examples to pull out interesting pieces of information.
 
 #### pull out the whole dataset
-  cat dataset.json | jq
+``cat dataset.json | jq``
 
 
 
