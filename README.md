@@ -201,6 +201,7 @@ services:
     image: apidb/ansibledb_opensource
     ports:
       - 8080:5000
+      - 443:443
     environment:
       MONGOHOST: mongodb
       MONGO_USERNAME: root
