@@ -222,9 +222,6 @@ This command will pull down the image from DockerHub and run the image in the ba
  <summary>Expand for ansible setup to collect facts</summary>
   <p>
    
-AnsibleDB will listen on port :8080. If you are running AnsibleDB on a remote server, remember to open up the FW to allow traffic on that port. If you're testing it out and running it on localhost, you'll be fine. You can always run this in the background ````nohup python3 server.py &````
-
-
 ## Now setup ansibledb_opensource:
 ansibledb_opensource is a collection of ansible roles to collect facts from all your servers and store them in the mongoDB. With a small amount of setup, you'll be up and running.
 **You can find the Galaxy collection here: https://galaxy.ansible.com/apidb/ansibledb_opensource**
